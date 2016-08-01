@@ -1,0 +1,23 @@
+# Config file for automatic testing at travis-ci.org
+
+language: python
+
+python:
+  - "3.5"
+
+before_install:
+  - pip install codecov
+
+install:
+  - pip install tox "coverage<4.0" python-coveralls>=2.5 coveralls>=0.5 codecov
+
+script:
+  - tox -e $TOXENV -- py.test tests -vv --capture=no --cov=adminactions --cov-report=xml --cov-config=tests/.coveragerc
+
+before_success:
+  - coverage erase
+
+after_success:
+  - coverage combine
+  - coveralls
+  - codecov
