@@ -124,7 +124,7 @@ def test_is(backend, view, rf, monkeypatch):
     request = Request(rf.get('/aaa/?logic__is=true'))
 
     qs = backend.filter_queryset(request, view.queryset, view)
-    assert list(qs.values('logic')) == [{'logic': True}]
+    assert list(qs.values('logic')) == [{u'logic': True}]
 
 
 @pytest.mark.django_db

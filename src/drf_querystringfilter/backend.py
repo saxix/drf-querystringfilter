@@ -28,7 +28,7 @@ class QueryStringFilterBackend(BaseFilterBackend):
         try:
             f, e = self._get_filters(request, queryset, view)
             return queryset.filter(**f).exclude(**e)
-        except InvalidFilterError:
+        except (InvalidFilterError, InvalidQueryArgumentError):
             raise
         except Exception as e:
             logger.exception(e)
@@ -89,6 +89,7 @@ class QueryStringFilterBackend(BaseFilterBackend):
                         if '.' in origin:
                             origin = origin.split('.')[0]
                         field_name = origin.replace('.', '__')
+                        # value = value[0]
                     else:
                         origin = field_name
 
@@ -147,11 +148,12 @@ class QueryStringFilterBackend(BaseFilterBackend):
                             elif isinstance(field_object, BooleanField):
                                 filters[field_name] = parse_bool(value)
                             else:
-                                filters[field_name] = value
+                                filters[field_name] = value[0]
 
                         except FieldDoesNotExist:
                             filters[origin] = value
                 except Exception as e:
+                    # raise
                     logger.exception(e)
                     raise InvalidFilterError(fieldname_arg)
         return filters, exclude
