@@ -26,8 +26,9 @@ Then use it in a project::
 
     import drf_querystringfilter
 
-Features
---------
 
-* TODO
+Configuration
+-------------
+
+
 

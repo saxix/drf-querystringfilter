@@ -65,7 +65,7 @@ def test_processor_alter_filter(backend, view, rf, monkeypatch):
     request = Request(rf.get('/aaa/?fk__id=1'))
 
     qs = backend.filter_queryset(request, view.queryset, view)
-    assert list(qs.values('id')) == [{u'id': 2}]
+    assert list(qs.values('id')) == [{'id': 2}]
 
 
 @pytest.mark.django_db
@@ -78,7 +78,7 @@ def test_processor_operator(backend, view, rf, monkeypatch):
     request = Request(rf.get('/aaa/?fk__ignore=1'))
 
     qs = backend.filter_queryset(request, view.queryset, view)
-    assert list(qs.values('id')) == [{u'id': 2}]
+    assert list(qs.values('id')) == [{'id': 2}]
 
 
 @pytest.mark.django_db
@@ -87,7 +87,7 @@ def test_equal(backend, view, rf, monkeypatch):
     monkeypatch.setattr(view, 'filter_fields', ['id'])
 
     qs = backend.filter_queryset(request, view.queryset, view)
-    assert list(qs.values('id')) == [{u'id': 1}]
+    assert list(qs.values('id')) == [{'id': 1}]
 
 
 @pytest.mark.django_db
@@ -96,7 +96,7 @@ def test_equal(backend, view, rf, monkeypatch):
     monkeypatch.setattr(view, 'filter_fields', ['char'])
 
     qs = backend.filter_queryset(request, view.queryset, view)
-    assert list(qs.values('char')) == [{u'char': '1'}]
+    assert list(qs.values('char')) == [{'char': '1'}]
 
 
 @pytest.mark.django_db
@@ -114,7 +114,7 @@ def test_lte(backend, view, rf, monkeypatch):
     request = Request(rf.get('/aaa/?id__lte=1'))
 
     qs = backend.filter_queryset(request, view.queryset, view)
-    assert list(qs.values('id')) == [{u'id': 1}]
+    assert list(qs.values('id')) == [{'id': 1}]
 
 
 @pytest.mark.django_db
@@ -124,7 +124,7 @@ def test_is(backend, view, rf, monkeypatch):
     request = Request(rf.get('/aaa/?logic__is=true'))
 
     qs = backend.filter_queryset(request, view.queryset, view)
-    assert list(qs.values('logic')) == [{u'logic': True}]
+    assert list(qs.values('logic')) == [{'logic': True}]
 
 
 @pytest.mark.django_db

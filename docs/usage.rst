@@ -50,3 +50,9 @@ list/set
 
     ?id__in=1,2,4
 
+list/set
+--------
+::
+
+    ?id__in=1,2,4
+

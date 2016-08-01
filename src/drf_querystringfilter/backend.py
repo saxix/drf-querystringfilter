@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 import logging
 
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import CharField
+from django.db.models import CharField, BooleanField
 from rest_framework.filters import BaseFilterBackend
 
 from .exceptions import FilteringError, InvalidFilterError, InvalidQueryArgumentError
@@ -135,18 +135,19 @@ class QueryStringFilterBackend(BaseFilterBackend):
                             elif op == 'not':
                                 f = "__".join([origin] + parts[1:-1])
                                 exclude[f] = value
-                                # exclude[origin] = value
                             else:
                                 f = "{}__{}".format(origin, "__".join(parts[1:]))
                                 filters[f] = value
                     else:
                         try:
-                            field_object, model, direct, m2m = opts.get_field_by_name(origin)
+                            field_object = opts.get_field(origin)
                             if isinstance(field_object, CharField):
                                 field_name = "{}__iexact".format(origin)
-                            filters[field_name] = value[0]
-                            # else:
-                            #     filters[field] = value
+                                filters[field_name] = value[0]
+                            elif isinstance(field_object, BooleanField):
+                                filters[field_name] = parse_bool(value)
+                            else:
+                                filters[field_name] = value
 
                         except FieldDoesNotExist:
                             filters[origin] = value
@@ -154,5 +155,3 @@ class QueryStringFilterBackend(BaseFilterBackend):
                     logger.exception(e)
                     raise InvalidFilterError(fieldname_arg)
         return filters, exclude
-        # queryset = self._filter_queryset(queryset, **filters).exclude(**exclude)
-        # return queryset

@@ -5,6 +5,14 @@ language: python
 python:
   - "3.5"
 
+env:
+  - TOXENV=py27-d19
+
+  - TOXENV=py35-d19
+
+  - TOXENV=pypy-d19
+
+
 before_install:
   - pip install codecov
 
