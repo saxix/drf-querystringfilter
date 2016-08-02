@@ -1,14 +1,14 @@
 coverage
 django-dynamic-fixture
 django-webtest>=1.7.5
+flake8
 mock>=1.0.1
 pytest
 pytest-cache
 pytest-cov
 pytest-django
-pytest-pythonpath
 pytest-echo
-WebTest>=2.0.7
+pytest-pythonpath
 setuptools>=15.0
-flake8
 tox
+WebTest>=2.0.7
