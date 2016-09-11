@@ -6,9 +6,12 @@ python:
   - "3.5"
 
 env:
+  - TOXENV=py27-d18
   - TOXENV=py27-d19
+  - TOXENV=py27-d110
 
   - TOXENV=py35-d19
+  - TOXENV=py35-d110
 
 
 before_install:
