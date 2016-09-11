@@ -1,0 +1,14 @@
+coverage==4.0.3
+django-dynamic-fixture<1.8.5 # bug in > 1.8
+django-webtest>=1.7.5
+flake8==2.5.4
+mock>=1.0.1
+pytest==3.0
+pytest-cache==1.0
+pytest-cov==2.3.1
+pytest-django==2.9.1
+pytest-echo==1.4
+pytest-pythonpath
+setuptools>=15.0
+tox==2.3.1
+webtest==2.0.21

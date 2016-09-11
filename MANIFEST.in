@@ -1,0 +1,10 @@
+include AUTHORS.rst
+include CONTRIBUTING.rst
+include CHANGES.rst
+include LICENSE
+include README.rst
+include tox.ini
+
+recursive-include src/drf_querystringfilter *.html *.png *.gif *js *.css *jpg *jpeg *svg *py
+recursive-include src/requirements *.pip
+recursive-include tests *
