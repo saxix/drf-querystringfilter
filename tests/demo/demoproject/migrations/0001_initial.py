@@ -31,7 +31,6 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254)),
                 ('float', models.FloatField()),
                 ('bigint', models.BigIntegerField()),
-                ('generic_ip', models.GenericIPAddressField()),
                 ('url', models.URLField()),
                 ('text', models.TextField()),
                 ('nullable', models.CharField(max_length=255, null=True, default=None)),

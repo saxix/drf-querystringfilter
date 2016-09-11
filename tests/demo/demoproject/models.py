@@ -18,7 +18,6 @@ class DemoModel(models.Model):
     email = models.EmailField()
     float = models.FloatField()
     bigint = models.BigIntegerField()
-    generic_ip = models.GenericIPAddressField()
     url = models.URLField()
     text = models.TextField()
 
