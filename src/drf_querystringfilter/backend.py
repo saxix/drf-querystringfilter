@@ -14,15 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringFilterBackend(BaseFilterBackend):
-    # IGNORED_QUERYARGS = ['page', 'serializer', 'q', 'term', 'page_size',
-    #                      'format', 'ordering', '_', 'fields']
-    # SPECIAL_QUERYARGS = ['_by', '_target', '_op']
 
-    # def field_is_allowed(self, request, field):
-    #     return True
-
-    # def get_ignored_queryargs(self, view):
-    #     return self.IGNORED_QUERYARGS + getattr(view, 'ignored_queryargs', [])
+    def ignore_filter(self, request, field, view):
+        return False
 
     def filter_queryset(self, request, queryset, view):  # noqa
         try:
@@ -59,12 +53,8 @@ class QueryStringFilterBackend(BaseFilterBackend):
                     if not value:
                         continue
 
-                    # if field in self.SPECIAL_QUERYARGS:
-                    #     continue
-                    # elif field.startswith('_') or field in self.get_ignored_queryargs(view):
-                    #     continue
-                    # if not self.field_is_allowed(field):
-                    #     continue
+                    if self.ignore_filter(request, fieldname_arg, view):
+                        continue
 
                     if fieldname_arg in blacklist:
                         raise InvalidQueryArgumentError(fieldname_arg)

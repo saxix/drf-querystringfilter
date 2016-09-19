@@ -1,9 +1,8 @@
-.. :changelog:
+0.2.0 19/09/16
+==============
+* add 'ignore_filter' to ignore querystring arguments
 
-History
--------
 
-0.1.0 11/09/16    
-++++++++++++++++++
-
+0.1.0 11/09/16
+==============
 * First release on PyPI.
