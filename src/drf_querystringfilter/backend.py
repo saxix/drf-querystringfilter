@@ -21,7 +21,11 @@ class QueryStringFilterBackend(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):  # noqa
         try:
             f, e = self._get_filters(request, queryset, view)
-            return queryset.filter(**f).exclude(**e)
+            qs = queryset.filter(**f).exclude(**e)
+            if '_distinct' in request.query_params:
+                f = request.query_params.getlist('_distinct')
+                qs =  qs.order_by(*f).distinct(*f)
+            return qs
         except (InvalidFilterError, InvalidQueryArgumentError):
             raise
         except Exception as e:
