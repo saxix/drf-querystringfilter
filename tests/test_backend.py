@@ -120,7 +120,7 @@ def test_lte(backend, view, rf, monkeypatch):
 @pytest.mark.django_db
 def test_is(backend, view, rf, monkeypatch):
     monkeypatch.setattr(view, 'filter_fields', ['logic'])
-    G(DemoModel, logic=True, fk=None)
+    G(DemoModel, json={}, logic=True, fk=None)
     request = Request(rf.get('/aaa/?logic__is=true'))
 
     qs = backend.filter_queryset(request, view.queryset, view)
@@ -187,8 +187,6 @@ def test_join_invalid(backend, view, rf, monkeypatch):
         backend.filter_queryset(request, view.queryset, view)
 
 
-
-
 @pytest.mark.django_db
 def test_blacklist(backend, view, rf, monkeypatch):
     monkeypatch.setattr(view, 'filter_fields', ['fk'])
@@ -218,7 +216,6 @@ def test_source_join(backend, view, rf, monkeypatch):
 
     qs = backend.filter_queryset(request, view.queryset, view)
     assert qs.filter(fk__username=1).exists()
-
 
 
 @pytest.mark.django_db
