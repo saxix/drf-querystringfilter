@@ -6,7 +6,7 @@ from django_dynamic_fixture import G
 from rest_framework.serializers import json, reverse
 from rest_framework.test import APIRequestFactory
 
-from demoproject.api import Users, DemoModelView
+from demoproject.api import DemoModelView
 from demoproject.models import DemoModel
 
 factory = APIRequestFactory()
@@ -63,7 +63,7 @@ class TestOperator(object):
         assert assert_result(response, 'char', '1')
 
     @pytest.mark.django_db
-    def test_is(self):
+    def test_logic(self):
         request = factory.get(self.uri, {'logic': False})
         response = self.view(request).render()
         assert assert_result(response, 'logic', False)
@@ -76,7 +76,7 @@ class TestOperator(object):
 
     @pytest.mark.django_db
     def test_in(self):
-        request = factory.get(self.uri, {'integer__in': "1,2,3"})
+        request = factory.get(self.uri, {'integer__in': '1,2,3'})
         response = self.view(request).render()
         assert assert_result(response, 'fk', lambda i: i in [1, 2, 3])
 
@@ -86,17 +86,17 @@ class TestOperator(object):
         response = self.view(request).render()
         assert assert_result(response, 'fk', lambda i: i is None)
         # j = json.loads(response.content)
-        # values = map(operator.itemgetter("fk"), j)
+        # values = map(operator.itemgetter('fk'), j)
         # assert all(i is None for i in values)
 
     @pytest.mark.django_db
     def test_not_in(self):
-        request = factory.get(self.uri, {'integer__not_in': "1,2,3"})
+        request = factory.get(self.uri, {'integer__not_in': '1,2,3'})
         response = self.view(request).render()
         assert assert_result(response, 'integer', lambda i: i not in [1, 2, 3])
 
         # j = json.loads(response.content)
-        # values = map(operator.itemgetter("fk"), j)
+        # values = map(operator.itemgetter('fk'), j)
         # assert all(i is None for i in values)
 
     @pytest.mark.django_db
@@ -110,7 +110,7 @@ class TestOperator(object):
         request = factory.get(self.uri, {'fk__gt': 1})
         response = self.view(request).render()
         j = json.loads(response.content.decode('utf-8'))
-        values = map(operator.itemgetter("fk"), j)
+        values = map(operator.itemgetter('fk'), j)
         assert all(i > 1 for i in values)
 
     @pytest.mark.django_db
@@ -118,7 +118,7 @@ class TestOperator(object):
         request = factory.get(self.uri, {'fk__lt': 1})
         response = self.view(request).render()
         j = json.loads(response.content.decode('utf-8'))
-        values = map(operator.itemgetter("fk"), j)
+        values = map(operator.itemgetter('fk'), j)
         assert all(i < 1 for i in values)
 
     @pytest.mark.django_db
@@ -126,7 +126,7 @@ class TestOperator(object):
         request = factory.get(self.uri, {'char__contains': 1})
         response = self.view(request).render()
         j = json.loads(response.content.decode('utf-8'))
-        values = map(operator.itemgetter("char"), j)
+        values = map(operator.itemgetter('char'), j)
         assert all('1' in i for i in values)
 
     @pytest.mark.django_db
@@ -134,7 +134,7 @@ class TestOperator(object):
         request = factory.get(self.uri, {'char__startswith': 1})
         response = self.view(request).render()
         j = json.loads(response.content.decode('utf-8'))
-        values = map(operator.itemgetter("char"), j)
+        values = map(operator.itemgetter('char'), j)
         assert all(i.startswith('1') for i in values)
 
     @pytest.mark.django_db
@@ -142,7 +142,7 @@ class TestOperator(object):
         request = factory.get(self.uri, {'char__endswith': 1})
         response = self.view(request).render()
         j = json.loads(response.content.decode('utf-8'))
-        values = map(operator.itemgetter("char"), j)
+        values = map(operator.itemgetter('char'), j)
         assert all(i.endswith('1') for i in values)
 
 
@@ -157,7 +157,7 @@ class TestAttributes(object):
         response = self.view(request).render()
         j = json.loads(response.content.decode('utf-8'))
         assert response.status_code == 400
-        assert j == {u'detail': u"Invalid filter 'xxxx'"}
+        assert j == {u"detail": u"Invalid filter 'xxxx'"}, j
 
 
 class TestJsonField(object):
@@ -165,27 +165,27 @@ class TestJsonField(object):
         self.view = DemoModelView.as_view()
         self.uri = reverse('demos')
         self.rec1 = G(DemoModel,
-                     fk=None,
-                     username=str(time.time()),
-                     json={"a": {"b": {"c": [11, 22, 33],
-                                       "d": "xyz",
-                                       "e": 2222,
-                                       "f": ["aa/11", "bb/22", "cc/33"]}
-                                 }
-                           })
+                      fk=None,
+                      username=str(time.time()),
+                      json={'a': {'b': {'c': [11, 22, 33],
+                                        'd': 'xyz',
+                                        'e': 2222,
+                                        'f': ['aa/11', 'bb/22', 'cc/33']}
+                                  }
+                            })
         self.rec2 = G(DemoModel,
-                     fk=None,
-                     username=str(time.time()),
-                     json={"a": {"b": {"c": [1, 2, 3],
-                                       "d": "abc",
-                                       "e": 22,
-                                       "f": ["a/1", "b/2", "c/3"]}
-                                 }
-                           })
+                      fk=None,
+                      username=str(time.time()),
+                      json={'a': {'b': {'c': [1, 2, 3],
+                                        'd': 'abc',
+                                        'e': 22,
+                                        'f': ['a/1', 'b/2', 'c/3']}
+                                  }
+                            })
 
     @pytest.mark.django_db
     def test_filter_1(self, monkeypatch):
-        rec1 = DemoModel.objects.get(json__a__b__d="abc")
+        rec1 = DemoModel.objects.get(json__a__b__d='abc')
         rec2 = DemoModel.objects.get(json__a__b__e=22)
         rec3 = DemoModel.objects.get(json__a__b__c__contains=[3])
         assert rec1.pk == rec2.pk == rec3.pk == self.rec2.pk
@@ -194,19 +194,18 @@ class TestJsonField(object):
         response = self.view(request).render()
         j = json.loads(response.content.decode('utf-8'))
 
-        value = map(operator.itemgetter("json"), j)[0]
+        value = map(operator.itemgetter('json'), j)[0]
         assert response.status_code == 200
-        assert value["a"]["b"]["c"] == [1,2,3]
+        assert value['a']['b']['c'] == [1, 2, 3]
 
     @pytest.mark.django_db
     def test_filter_2(self, client):
-        rec1 = DemoModel.objects.get(json__a__b__d="abc")
+        rec1 = DemoModel.objects.get(json__a__b__d='abc')
         rec2 = DemoModel.objects.get(json__a__b__e=22)
-        rec3 = DemoModel.objects.get(json__a__b__c__contains=[3])
+        rec3 = DemoModel.objects.get(json__a__b__f__contains=['a/1'])
         assert rec1.pk == rec2.pk == rec3.pk == self.rec2.pk
         res = client.get('{}?json__a__b__f__contains="a/1"'.format(self.uri))
         j = json.loads(res.content.decode('utf-8'))
-        value = map(operator.itemgetter("json"), j)[0]
+        value = map(operator.itemgetter('json'), j)[0]
         assert res.status_code == 200
-        assert value["a"]["b"]["c"] == [1,2,3]
-
+        assert value['a']['b']['c'] == [1, 2, 3]

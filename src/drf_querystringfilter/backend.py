@@ -24,7 +24,7 @@ class QueryStringFilterBackend(BaseFilterBackend):
             qs = queryset.filter(**f).exclude(**e)
             if '_distinct' in request.query_params:
                 f = request.query_params.getlist('_distinct')
-                qs =  qs.order_by(*f).distinct(*f)
+                qs = qs.order_by(*f).distinct(*f)
             return qs
         except (InvalidFilterError, InvalidQueryArgumentError):
             raise
