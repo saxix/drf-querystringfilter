@@ -11,6 +11,7 @@ from drf_querystringfilter.backend import QueryStringFilterBackend
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
+        exclude = ()
 
 
 class Users(ListAPIView):
@@ -27,6 +28,7 @@ class DemoModelSerializer(ModelSerializer):
 
     class Meta:
         model = DemoModel
+        exclude = ()
 
 
 class DemoModelView(ListAPIView):
