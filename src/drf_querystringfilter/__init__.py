@@ -6,7 +6,7 @@ import datetime
 import os
 
 NAME = 'drf-querystringfilter'
-VERSION = __version__ = (0, 3, 0, 'final', 0)
+VERSION = __version__ = (0, 4, 0, 'final', 0)
 __author__ = 'sax'
 
 
