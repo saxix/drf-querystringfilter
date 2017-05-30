@@ -130,6 +130,16 @@ class QueryStringFilterBackend(BaseFilterBackend):
                             elif op == 'not':
                                 f = "__".join([origin] + parts[1:-1])
                                 exclude[f] = value
+
+                            elif op == 'contains_int':
+                                f = "__".join([origin] + parts[1:-1]) + "__contains"
+                                filters[f] = [int(value)]
+                            elif op == 'acontains':
+                                f = "__".join([origin] + parts[1:-1]) + "__contains"
+                                filters[f] = [value]
+
+
+
                             elif op == 'int_inarray':
                                 f = "__".join([origin] + parts[1:-1]) + "__contains"
                                 filters[f] = [int(value)]
