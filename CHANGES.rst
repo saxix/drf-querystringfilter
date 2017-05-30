@@ -1,3 +1,7 @@
+0.4.0 29/05/2017
+================
+* add '__inarray' and  '__int_inarray' lookup to handle json/arrays lookup both str/int
+
 0.3.0 10/10/16
 ==============
 * add '_distinct' parameter to enable '.distinct()' queries

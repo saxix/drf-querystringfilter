@@ -4,10 +4,8 @@ from __future__ import absolute_import, unicode_literals
 import logging
 
 import pytest
-from django.utils.translation import gettext as _
 from django_dynamic_fixture import G
 from rest_framework.request import Request
-from rest_framework.test import APIRequestFactory
 
 from demoproject.api import DemoModelView
 from demoproject.models import DemoModel
@@ -82,7 +80,7 @@ def test_processor_operator(backend, view, rf, monkeypatch):
 
 
 @pytest.mark.django_db
-def test_equal(backend, view, rf, monkeypatch):
+def test_equal1(backend, view, rf, monkeypatch):
     request = Request(rf.get('/aaa/?id=1'))
     monkeypatch.setattr(view, 'filter_fields', ['id'])
 
@@ -91,7 +89,7 @@ def test_equal(backend, view, rf, monkeypatch):
 
 
 @pytest.mark.django_db
-def test_equal(backend, view, rf, monkeypatch):
+def test_equal2(backend, view, rf, monkeypatch):
     request = Request(rf.get(b'/aaa/?char=1'))
     monkeypatch.setattr(view, 'filter_fields', ['char'])
 
@@ -120,7 +118,7 @@ def test_lte(backend, view, rf, monkeypatch):
 @pytest.mark.django_db
 def test_is(backend, view, rf, monkeypatch):
     monkeypatch.setattr(view, 'filter_fields', ['logic'])
-    G(DemoModel, logic=True, fk=None)
+    G(DemoModel, json={}, logic=True, fk=None)
     request = Request(rf.get('/aaa/?logic__is=true'))
 
     qs = backend.filter_queryset(request, view.queryset, view)
@@ -187,8 +185,6 @@ def test_join_invalid(backend, view, rf, monkeypatch):
         backend.filter_queryset(request, view.queryset, view)
 
 
-
-
 @pytest.mark.django_db
 def test_blacklist(backend, view, rf, monkeypatch):
     monkeypatch.setattr(view, 'filter_fields', ['fk'])
@@ -220,9 +216,8 @@ def test_source_join(backend, view, rf, monkeypatch):
     assert qs.filter(fk__username=1).exists()
 
 
-
 @pytest.mark.django_db
-def test_invalid_filter(backend, view, rf, monkeypatch):
+def test_invalid_filter2(backend, view, rf, monkeypatch):
     monkeypatch.setattr(view, 'filter_fields', ['id'])
 
     request = Request(rf.get(b'/aaa/?id=a'))

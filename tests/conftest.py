@@ -21,4 +21,6 @@ def _django_db_setup(request,
     with _django_cursor_wrapper:
         from demoproject.models import DemoModel
         if request.config.option.create_db:
-            G(DemoModel, n=100)
+            G(DemoModel,
+              json={},
+              n=100)
