@@ -27,8 +27,8 @@ exact/iexact
 .. _contains:
 .. _substring:
 
-substring
----------
+contains
+--------
 ::
 
     ?email__contains=@gmail
@@ -41,18 +41,62 @@ gt/gte
 ------
 ::
 
+    ?int__gt=5
+
+
+lt/lte
+------
+::
+
     ?int__lt=5
 
+is
+--
+::
 
-list/set
---------
+    ?flag__is=1
+    ?flag__is=true
+
+or ::
+
+    ?flag__is=0
+    ?flag__is=false
+
+
+isnull
+------
+::
+
+    ?flag__isnull=true
+    ?flag__isnull=false
+
+not
+---
+::
+
+    ?name__not=abc
+
+in
+--
 ::
 
     ?id__in=1,2,4
 
-list/set
---------
+not_in
+------
 ::
 
-    ?id__in=1,2,4
+    ?id__not_in=1,2,4
+
+inarray
+-------
+::
+
+    ?json__array__inarray=a
+
+int_inarray
+-----------
+::
+
+    ?json__array__int_inarray=1
 
