@@ -10,7 +10,6 @@ else:
     from django.db.models import TextField as JSONField
 
 from django.db import models
-from django.template.backends import django
 
 
 class DemoModel(models.Model):
@@ -20,14 +19,14 @@ class DemoModel(models.Model):
     logic = models.BooleanField(default=False)
     null_logic = models.NullBooleanField(default=None)
     date = models.DateField()
-    datetime = models.DateTimeField()
-    time = models.TimeField()
-    decimal = models.DecimalField(max_digits=10, decimal_places=3)
-    email = models.EmailField()
-    float = models.FloatField()
-    bigint = models.BigIntegerField()
-    url = models.URLField()
-    text = models.TextField()
+    # datetime = models.DateTimeField()
+    # time = models.TimeField()
+    # decimal = models.DecimalField(max_digits=10, decimal_places=3)
+    # email = models.EmailField()
+    # float = models.FloatField()
+    # bigint = models.BigIntegerField()
+    # url = models.URLField()
+    # text = models.TextField()
     json = JSONField(blank=True, null=True)
     nullable = models.CharField(max_length=255, null=True, default=None)
     choices = models.IntegerField(choices=((1, 'Choice 1'), (2, 'Choice 2'), (3, 'Choice 3')))
