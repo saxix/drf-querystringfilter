@@ -44,7 +44,7 @@ clean-pyc:
 
 qa:
 	flake8 src/drf_querystringfilter tests
-	isort -rc drf_querystringfilter tests --check-only
+	isort -rc src/drf_querystringfilter tests --check-only
 	check-manifest
 
 docs:

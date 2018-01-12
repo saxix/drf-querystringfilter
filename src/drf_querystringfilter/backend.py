@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 import logging
 
 # from django.core.exceptions import FieldDoesNotExist
-from django.db.models import CharField, BooleanField
+from django.db.models import BooleanField, CharField
 from rest_framework.filters import BaseFilterBackend
 
 from .exceptions import FilteringError, InvalidFilterError, InvalidQueryArgumentError
