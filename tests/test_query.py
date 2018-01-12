@@ -5,7 +5,10 @@ import operator
 
 import django
 import pytest
+from rest_framework.test import APIRequestFactory
 
+from demoproject.api import DemoModelView
+from demoproject.models import DemoModel
 from demoproject.utils import record
 
 try:
@@ -13,10 +16,6 @@ try:
 except ImportError:
     from django.core.urlresolvers import reverse
 
-from rest_framework.test import APIRequestFactory
-
-from demoproject.api import DemoModelView
-from demoproject.models import DemoModel
 
 factory = APIRequestFactory()
 uri = reverse('demos')

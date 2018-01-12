@@ -7,8 +7,9 @@ from rest_framework.request import Request
 from demoproject.api import DemoModelView
 from demoproject.models import DemoModel
 from demoproject.utils import record
+
 from drf_querystringfilter.backend import QueryStringFilterBackend
-from drf_querystringfilter.exceptions import InvalidFilterError, FilteringError
+from drf_querystringfilter.exceptions import FilteringError, InvalidFilterError
 
 
 def assert_queryset_values(qs, field, value):

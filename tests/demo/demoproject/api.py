@@ -2,9 +2,10 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth.models import User
 from rest_framework.generics import ListAPIView
-from rest_framework.serializers import ModelSerializer, CharField
+from rest_framework.serializers import CharField, ModelSerializer
 
 from demoproject.models import DemoModel
+
 from drf_querystringfilter.backend import QueryStringFilterBackend
 
 

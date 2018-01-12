@@ -20,9 +20,9 @@ clean:
 	find src -name django.mo | xargs rm -f
 
 
-fullclean: clean
-	find . -name *.sqlite -prune | xargs rm -rf
+fullclean:
 	@rm -fr .tox .cache
+	$(MAKE) clean
 
 develop:
 	pip install -U pip

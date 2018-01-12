@@ -26,7 +26,7 @@ class QueryStringFilterBackend(BaseFilterBackend):
             qs = queryset.filter(**f).exclude(**e)
             logger.debug("""Filtering using:
 {}
-{}""".format(f,e))
+{}""".format(f, e))
             if '_distinct' in request.query_params:
                 f = request.query_params.getlist('_distinct')
                 qs = qs.order_by(*f).distinct(*f)
@@ -145,9 +145,6 @@ class QueryStringFilterBackend(BaseFilterBackend):
                             elif op == 'acontains':
                                 f = "__".join([origin] + parts[1:-1]) + "__contains"
                                 filters[f] = [value]
-
-
-
                             elif op == 'int_inarray':
                                 f = "__".join([origin] + parts[1:-1]) + "__contains"
                                 filters[f] = [int(value)]
