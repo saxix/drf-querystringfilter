@@ -4,7 +4,7 @@ python:
   - "3.6"
 
 addons:
-  postgres: "9.4"
+  postgres: "9.6"
   apt:
     packages:
       - postgresql-server-dev-9.4
@@ -33,6 +33,8 @@ env:
 before_install:
   - pip install tox codecov
 
+before_script:
+  - psql -c 'SHOW SERVER_VERSION' -U postgres
 
 script:
   - tox -e $TOXENV
