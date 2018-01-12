@@ -4,7 +4,7 @@ python:
   - "3.6"
 
 addons:
-  postgres: "9.6"
+  postgresql: "9.4"
   apt:
     packages:
       - postgresql-server-dev-9.4
