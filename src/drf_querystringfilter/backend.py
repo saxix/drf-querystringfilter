@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 import logging
 
-from django.core.exceptions import FieldDoesNotExist
+# from django.core.exceptions import FieldDoesNotExist
 from django.db.models import CharField, BooleanField
 from rest_framework.filters import BaseFilterBackend
 
@@ -139,12 +139,12 @@ class QueryStringFilterBackend(BaseFilterBackend):
                                 f = "__".join([origin] + parts[1:-1])
                                 exclude[f] = value
 
-                            elif op == 'contains_int':
-                                f = "__".join([origin] + parts[1:-1]) + "__contains"
-                                filters[f] = [int(value)]
-                            elif op == 'acontains':
-                                f = "__".join([origin] + parts[1:-1]) + "__contains"
-                                filters[f] = [value]
+                            # elif op == 'contains_int':
+                            #     f = "__".join([origin] + parts[1:-1]) + "__contains"
+                            #     filters[f] = [int(value)]
+                            # elif op == 'acontains':
+                            #     f = "__".join([origin] + parts[1:-1]) + "__contains"
+                            #     filters[f] = [value]
                             elif op == 'int_inarray':
                                 f = "__".join([origin] + parts[1:-1]) + "__contains"
                                 filters[f] = [int(value)]
@@ -155,18 +155,18 @@ class QueryStringFilterBackend(BaseFilterBackend):
                                 f = "{}__{}".format(origin, "__".join(parts[1:]))
                                 filters[f] = value
                     else:
-                        try:
-                            field_object = opts.get_field(origin)
-                            if isinstance(field_object, CharField):
-                                field_name = "{}__iexact".format(origin)
-                                filters[field_name] = value[0]
-                            elif isinstance(field_object, BooleanField):
-                                filters[field_name] = parse_bool(value)
-                            else:
-                                filters[field_name] = value[0]
+                        # try:
+                        field_object = opts.get_field(origin)
+                        if isinstance(field_object, CharField):
+                            field_name = "{}__iexact".format(origin)
+                            filters[field_name] = value[0]
+                        elif isinstance(field_object, BooleanField):
+                            filters[field_name] = parse_bool(value)
+                        else:
+                            filters[field_name] = value[0]
 
-                        except FieldDoesNotExist:
-                            filters[origin] = value
+                        # except FieldDoesNotExist:
+                        #     filters[origin] = value
                 except Exception as e:
                     # raise
                     logger.exception(e)

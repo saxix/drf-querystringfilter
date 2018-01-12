@@ -55,6 +55,7 @@ def test_processor(backend, view, rf, monkeypatch):
 def test_processor_alter_filter(backend, view, rf, monkeypatch):
     def process_fk(*k, **kw):
         return {'fk__id': 2}, {}
+
     record(id=2)
     monkeypatch.setattr(view, 'filter_fields', ['fk'])
     monkeypatch.setattr(backend, 'process_fk', process_fk, False)
