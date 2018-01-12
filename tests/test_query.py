@@ -5,13 +5,14 @@ import operator
 
 import django
 import pytest
-import time
+
+from demoproject.utils import record
 
 try:
-    from django.urls import reverse
+    from django.urls import reverse # django 2.0
 except ImportError:
     from django.core.urlresolvers import reverse
-from django_dynamic_fixture import G
+
 from rest_framework.test import APIRequestFactory
 
 from demoproject.api import DemoModelView
@@ -37,26 +38,27 @@ class TestEqual(object):
 
     @pytest.mark.django_db
     def test_equal_integer(self):
-        request = factory.get(self.uri, {'integer': 1})
-        response = self.view(request).render()
-        j = json.loads(response.content.decode('utf-8'))
-        assert j[0]['integer'] == 1
+        with record():
+            request = factory.get(self.uri, {'integer': 1})
+            response = self.view(request).render()
+            j = json.loads(response.content.decode('utf-8'))
+            assert j[0]['integer'] == 1
 
     @pytest.mark.django_db
     def test_equal_logic(self):
-        rec = G(DemoModel, json={}, logic=True, fk=None)
-        request = factory.get(self.uri, {'logic': 'true'})
-        response = self.view(request).render()
-        j = json.loads(response.content.decode('utf-8'))
-        assert j[0]['logic'] == rec.logic
+        with record(logic=True) as rec:
+            request = factory.get(self.uri, {'logic': 'true'})
+            response = self.view(request).render()
+            j = json.loads(response.content.decode('utf-8'))
+            assert j[0]['logic'] == rec.logic
 
     @pytest.mark.django_db
     def test_equal_date(self):
-        rec = G(DemoModel, json={}, date='2000-01-01', fk=None)
-        request = factory.get(self.uri, {'date': '2000-01-01'})
-        response = self.view(request).render()
-        j = json.loads(response.content.decode('utf-8'))
-        assert j[0]['date'] == rec.date
+        with record(json={}, date='2000-01-01', ) as rec:
+            request = factory.get(self.uri, {'date': '2000-01-01'})
+            response = self.view(request).render()
+            j = json.loads(response.content.decode('utf-8'))
+            assert j[0]['date'] == rec.date
 
 
 class TestOperator(object):
@@ -173,24 +175,29 @@ class TestJsonField(object):
     def setup(self):
         self.view = DemoModelView.as_view()
         self.uri = reverse('demos')
-        self.rec1 = G(DemoModel,
-                      fk=None,
-                      username=str(time.time()),
-                      json={'a': {'b': {'c': [11, 22, 33],
-                                        'd': 'xyz',
-                                        'e': 2222,
-                                        'f': ['aa/11', 'bb/22', 'cc/33']}
-                                  }
-                            })
-        self.rec2 = G(DemoModel,
-                      fk=None,
-                      username=str(time.time()),
-                      json={'a': {'b': {'c': [1, 2, 3],
-                                        'd': 'abc',
-                                        'e': 22,
-                                        'f': ['a/1', 'b/2', 'c/3']}
-                                  }
-                            })
+        self.rec1 = record(id=1,
+            # username=str(time.time()),
+            json={'a': {'b': {'c': [11, 22, 33],
+                              'd': 'xyz',
+                              'e': 2222,
+                              'f': ['aa/11', 'bb/22', 'cc/33']}
+                        }
+                  }).obj
+
+        self.rec2 = record(
+            id=2,
+            # fk=None,
+            # username=str(time.time()),
+            json={'a': {'b': {'c': [1, 2, 3],
+                              'd': 'abc',
+                              'e': 22,
+                              'f': ['a/1', 'b/2', 'c/3']}
+                        }
+                  }).obj
+
+    def teardown(self):
+        self.rec1.delete()
+        self.rec2.delete()
 
     @pytest.mark.django_db
     def test_filter_contains_str1(self, client):

@@ -1,5 +1,5 @@
 import pytest
-from django_dynamic_fixture import G
+import logging
 
 
 @pytest.fixture(scope='session')
@@ -13,14 +13,8 @@ def client(request):
     return app
 
 
-@pytest.fixture(scope='session')
-def _django_db_setup(request,
-                     _django_test_environment,
-                     _django_cursor_wrapper,
-                     _django_db_setup):
-    with _django_cursor_wrapper:
-        from demoproject.models import DemoModel
-        if request.config.option.create_db:
-            G(DemoModel,
-              json={},
-              n=100)
+def pytest_configure():
+    logger = logging.getLogger("drf_querystringfilter")
+    handler = logging.NullHandler()
+    # handler = logging.StreamHandler()
+    logger.handlers = [handler]

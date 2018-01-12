@@ -11,6 +11,9 @@ Configure your view to use it::
 
     class DemoModelView(ListAPIView):
         filter_backends = (QueryStringFilterBackend,)
+        filter_fields = ['username', 'email', 'is_staff', 'date_joined']
+        filter_blacklist = ['.*__']  # disable any join
+
 
 Filtering
 =========

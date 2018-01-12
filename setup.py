@@ -43,7 +43,7 @@ setup(name=app.NAME,
       tests_require=dev_requires,
       extras_require={
           'dev': dev_requires,
-          'tests': tests_requires,
+          'test': tests_requires,
       },
       license="BSD",
       zip_safe=False,

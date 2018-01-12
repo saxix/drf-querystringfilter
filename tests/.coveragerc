@@ -1,6 +1,6 @@
 [run]
 branch = False
-source = concurrency
+source = drf_querystringfilter
 include =
 
 omit = **/drf_querystringfilter/__init__.py
