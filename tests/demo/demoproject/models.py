@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-import django
-from django.contrib.auth.models import User
-
-if django.VERSION >= (1, 9):
-    from django.contrib.postgres.fields import JSONField
-else:
-    from django.db.models import TextField as JSONField
-
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.postgres.fields import JSONField
 
 
 class DemoModel(models.Model):
-    fk = models.ForeignKey(User, blank=True, null=True)
+    fk = models.ForeignKey(User,
+                           on_delete=models.CASCADE,
+                           blank=True, null=True)
     char = models.CharField('Chäř', max_length=255)
     integer = models.IntegerField()
     logic = models.BooleanField(default=False)

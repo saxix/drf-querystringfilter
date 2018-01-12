@@ -16,17 +16,23 @@ logger = logging.getLogger(__name__)
 class QueryStringFilterBackend(BaseFilterBackend):
 
     def ignore_filter(self, request, field, view):
+        if hasattr(view, 'drf_ignore_filter'):
+            return view.drf_ignore_filter(request, field)
         return False
 
     def filter_queryset(self, request, queryset, view):  # noqa
         try:
             f, e = self._get_filters(request, queryset, view)
             qs = queryset.filter(**f).exclude(**e)
+            logger.debug("""Filtering using:
+{}
+{}""".format(f,e))
             if '_distinct' in request.query_params:
                 f = request.query_params.getlist('_distinct')
                 qs = qs.order_by(*f).distinct(*f)
             return qs
-        except (InvalidFilterError, InvalidQueryArgumentError):
+        except (InvalidFilterError, InvalidQueryArgumentError) as e:
+            logger.exception(e)
             raise
         except Exception as e:
             logger.exception(e)
@@ -51,6 +57,8 @@ class QueryStringFilterBackend(BaseFilterBackend):
             mapping = view.get_serializer().fields
             opts = queryset.model._meta
             for fieldname_arg in request.query_params:
+                if fieldname_arg in ['_distinct']:
+                    continue
                 try:
                     value = request.query_params.getlist(fieldname_arg)
                     value = list(filter(lambda x: x, value))

@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-import logging
-
 import pytest
 
 from drf_querystringfilter.exceptions import InvalidPattern
 from drf_querystringfilter.filters import RexList
-
-logger = logging.getLogger(__name__)
 
 
 def test_rexlist():

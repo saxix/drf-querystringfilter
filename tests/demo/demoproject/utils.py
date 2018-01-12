@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from contextlib import contextmanager
-
 import pytest
 import sys
+import six
 
 from datetime import datetime
 
@@ -42,4 +41,4 @@ class record(object):
         self.obj.delete()
         self.u.delete()
         if exc_type:
-            raise exc_type, exc_val, exc_tb
+            six.reraise(exc_type, exc_val, exc_tb)

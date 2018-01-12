@@ -6,29 +6,24 @@ python:
   - "3.5"
 
 env:
-  - TOXENV=py27-d18
-  - TOXENV=py27-d19
   - TOXENV=py27-d110
   - TOXENV=py27-d111
 
-  - TOXENV=py35-d19
   - TOXENV=py35-d110
   - TOXENV=py35-d111
+  - TOXENV=py35-d20
 
 
 before_install:
-  - pip install codecov
+  - pip install tox codecov
 
-install:
-  - pip install tox "coverage<4.0" python-coveralls>=2.5 coveralls>=0.5 codecov
 
 script:
-  - tox -e $TOXENV -- py.test tests --create-db -vv --capture=no --cov=drf_querystringfilter --cov-report=xml --cov-config=tests/.coveragerc
+  - tox -e $TOXENV
 
 before_success:
   - coverage erase
 
 after_success:
   - coverage combine
-  - coveralls
   - codecov
