@@ -3,15 +3,24 @@
 language: python
 
 python:
-  - "3.5"
+  - "3.6"
 
 env:
-  - TOXENV=py27-d110
-  - TOXENV=py27-d111
+  - TOXENV=py27-d110-f35
+  - TOXENV=py27-d110-f36
+  - TOXENV=py27-d110-f37
+  - TOXENV=py27-d111-f35
+  - TOXENV=py27-d111-f36
+  - TOXENV=py27-d111-f37
 
-  - TOXENV=py35-d110
-  - TOXENV=py35-d111
-  - TOXENV=py35-d20
+  - TOXENV=py36-d110-f35
+  - TOXENV=py36-d110-f36
+  - TOXENV=py36-d110-f37
+  - TOXENV=py36-d111-f35
+  - TOXENV=py36-d111-f36
+  - TOXENV=py36-d111-f37
+
+  - TOXENV=py36-d20-f37
 
 
 before_install:
