@@ -1,6 +1,7 @@
 0.5.0 (dev)
 ===========
 * add support for django 2.0
+* add `query_params` property to allow handling POST request
 
 
 0.4.0 29/05/2017

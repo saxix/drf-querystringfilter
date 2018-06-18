@@ -14,6 +14,12 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringFilterBackend(BaseFilterBackend):
+    @property
+    def query_params(self):
+        """
+        More semantically correct name for request.GET.
+        """
+        return self.request._request.GET
 
     def ignore_filter(self, request, field, view):
         if hasattr(view, 'drf_ignore_filter'):
@@ -21,14 +27,15 @@ class QueryStringFilterBackend(BaseFilterBackend):
         return False
 
     def filter_queryset(self, request, queryset, view):  # noqa
+        self.request = request
         try:
             f, e = self._get_filters(request, queryset, view)
             qs = queryset.filter(**f).exclude(**e)
             logger.debug("""Filtering using:
 {}
 {}""".format(f, e))
-            if '_distinct' in request.query_params:
-                f = request.query_params.getlist('_distinct')
+            if '_distinct' in self.query_params:
+                f = self.query_params.getlist('_distinct')
                 qs = qs.order_by(*f).distinct(*f)
             return qs
         except (InvalidFilterError, InvalidQueryArgumentError) as e:
@@ -52,15 +59,19 @@ class QueryStringFilterBackend(BaseFilterBackend):
         filter_fields = getattr(view, 'filter_fields', None)
         exclude = {}
         filters = {}
+
         if filter_fields:
             blacklist = RexList(getattr(view, 'filter_blacklist', []))
-            mapping = view.get_serializer().fields
+            if hasattr(view, 'get_serializer'):
+                mapping = view.get_serializer().fields
+            else:
+                mapping = {}
             opts = queryset.model._meta
-            for fieldname_arg in request.query_params:
+            for fieldname_arg in self.query_params:
                 if fieldname_arg in ['_distinct']:
                     continue
                 try:
-                    value = request.query_params.getlist(fieldname_arg)
+                    value = self.query_params.getlist(fieldname_arg)
                     value = list(filter(lambda x: x, value))
                     if not value:
                         continue
@@ -70,7 +81,6 @@ class QueryStringFilterBackend(BaseFilterBackend):
 
                     if fieldname_arg in blacklist:
                         raise InvalidQueryArgumentError(fieldname_arg)
-
                     parts = None
                     if '__' in fieldname_arg:
                         parts = fieldname_arg.split('__')
@@ -80,10 +90,8 @@ class QueryStringFilterBackend(BaseFilterBackend):
 
                     processor = getattr(self, 'process_{}'.format(field_name), None)
 
-                    # if (field_name not in filter_fields) and (field not in filter_fields):
                     if (field_name not in filter_fields) and (not processor):
                         raise InvalidQueryArgumentError(fieldname_arg)
-                    # if isinstance(field_object, ForeignKey):
                     # field is configured in Serializer
                     # so we use 'source' attribute
                     if field_name in mapping:
@@ -91,7 +99,6 @@ class QueryStringFilterBackend(BaseFilterBackend):
                         if '.' in origin:
                             origin = origin.split('.')[0]
                         field_name = origin.replace('.', '__')
-                        # value = value[0]
                     else:
                         origin = field_name
 

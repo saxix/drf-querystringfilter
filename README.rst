@@ -7,7 +7,7 @@ drf-querystringfilter
 
 Filter backend for DjangoRestFramework able to parse url parameters
 
-Supports drf 3.5.x, 3.6.x, 3.7.x, Django 1.10.x, 1.11.x, 2.0.x, python 2.7, 3.6
+Supports drf 3.5.x, 3.6.x, 3.7.x, 3.8.x Django 1.10.x, 1.11.x, 2.0.x, python 2.7, 3.6
 
 Documentation
 -------------
@@ -40,7 +40,7 @@ now you can query using...
 .. code-block:: sh
 
     - /users/?username=sax
-    - /users/?username__startswith=sa
+    - /users/?username__startswith=sa&date_joined__year=2000
     - /users/?email__contains=@gmail.com
     - /users/?is_staff=true
 
