@@ -7,8 +7,9 @@ from rest_framework.request import Request
 from demoproject.api import DemoModelView
 from demoproject.models import DemoModel
 from demoproject.utils import record
+
 from drf_querystringfilter.backend import QueryStringFilterBackend
-from drf_querystringfilter.exceptions import InvalidFilterError, FilteringError
+from drf_querystringfilter.exceptions import FilteringError, InvalidFilterError
 
 
 def assert_queryset_values(qs, field, value):
@@ -54,6 +55,7 @@ def test_processor(backend, view, rf, monkeypatch):
 def test_processor_alter_filter(backend, view, rf, monkeypatch):
     def process_fk(*k, **kw):
         return {'fk__id': 2}, {}
+
     record(id=2)
     monkeypatch.setattr(view, 'filter_fields', ['fk'])
     monkeypatch.setattr(backend, 'process_fk', process_fk, False)

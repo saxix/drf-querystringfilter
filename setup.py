@@ -30,7 +30,7 @@ readme = codecs.open('README.rst').read()
 history = codecs.open('CHANGES.rst').read().replace('.. :changelog:', '')
 
 setup(name=app.NAME,
-      version=app.get_version(),
+      version=app.VERSION,
       description="""Filter backend for DjangoRestFramework able to parse url parameters""",
       long_description=readme + '\n\n' + history,
       author='Stefano Apostolico',

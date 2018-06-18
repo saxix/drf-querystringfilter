@@ -1,9 +1,16 @@
-# Config file for automatic testing at travis-ci.org
-
 language: python
 
 python:
   - "3.6"
+
+addons:
+  postgresql: "9.4"
+  apt:
+    packages:
+      - postgresql-server-dev-9.4
+
+services:
+  - postgresql
 
 env:
   - TOXENV=py27-d110-f35
@@ -26,6 +33,8 @@ env:
 before_install:
   - pip install tox codecov
 
+before_script:
+  - psql -c 'SHOW SERVER_VERSION' -U postgres
 
 script:
   - tox -e $TOXENV

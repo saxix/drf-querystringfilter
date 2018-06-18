@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-import pytest
 import sys
-import six
-
 from datetime import datetime
+
+import pytest
+import six
 
 windows = pytest.mark.skipif(sys.platform != 'win32', reason='requires windows')
 

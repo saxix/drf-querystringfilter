@@ -8,3 +8,14 @@ include tox.ini
 recursive-include src/drf_querystringfilter *.html *.png *.gif *js *.css *jpg *jpeg *svg *py
 recursive-include src/requirements *.pip
 recursive-include tests *
+
+exclude .appveyor.yml
+exclude .editorconfig
+exclude Makefile
+exclude docs
+exclude hooks
+exclude tests
+
+recursive-exclude docs *
+recursive-exclude hooks *
+recursive-exclude tests *

@@ -20,9 +20,9 @@ clean:
 	find src -name django.mo | xargs rm -f
 
 
-fullclean: clean
-	find . -name *.sqlite -prune | xargs rm -rf
+fullclean:
 	@rm -fr .tox .cache
+	$(MAKE) clean
 
 develop:
 	pip install -U pip
@@ -44,7 +44,7 @@ clean-pyc:
 
 qa:
 	flake8 src/drf_querystringfilter tests
-	isort -rc drf_querystringfilter tests --check-only
+	isort -rc src/drf_querystringfilter tests --check-only
 	check-manifest
 
 docs:
