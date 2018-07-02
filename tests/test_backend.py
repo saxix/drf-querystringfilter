@@ -81,6 +81,27 @@ def test_processor_operator(backend, view, rf, monkeypatch):
 
 
 @pytest.mark.django_db
+def test_format(backend, view, rf, monkeypatch):
+    request = Request(rf.get('/aaa/?format=csv'))
+    monkeypatch.setattr(view, 'filter_fields', ['id'])
+    record(id=1)
+
+    qs = backend.filter_queryset(request, view.queryset, view)
+    assert list(qs.values('id')) == [{'id': 1}]
+
+
+@pytest.mark.django_db
+def test_format_override(backend, view, rf, monkeypatch, settings):
+    settings.URL_FORMAT_OVERRIDE = "f"
+    request = Request(rf.get('/aaa/?f=csv'))
+    monkeypatch.setattr(view, 'filter_fields', ['id'])
+    record(id=1)
+
+    qs = backend.filter_queryset(request, view.queryset, view)
+    assert list(qs.values('id')) == [{'id': 1}]
+
+
+@pytest.mark.django_db
 def test_equal1(backend, view, rf, monkeypatch):
     request = Request(rf.get('/aaa/?id=1'))
     monkeypatch.setattr(view, 'filter_fields', ['id'])
