@@ -52,3 +52,7 @@ docs:
 	rm -f docs/modules.rst
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
+
+requirements:
+	pipenv lock --requirements -d > src/requirements/testing.pip
+	pipenv lock --requirements > src/requirements/install.pip

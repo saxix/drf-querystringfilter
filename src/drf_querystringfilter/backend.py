@@ -4,6 +4,7 @@ from __future__ import absolute_import, unicode_literals
 import logging
 
 # from django.core.exceptions import FieldDoesNotExist
+from django.conf import settings
 from django.db.models import BooleanField, CharField
 from rest_framework.filters import BaseFilterBackend
 
@@ -20,6 +21,15 @@ class QueryStringFilterBackend(BaseFilterBackend):
         More semantically correct name for request.GET.
         """
         return self.request._request.GET
+
+    @property
+    def excluded_query_params(self):
+        params_list = ['_distinct']
+        format_param = "format"
+        if hasattr(settings, "URL_FORMAT_OVERRIDE"):
+            format_param = settings.URL_FORMAT_OVERRIDE
+        params_list.append(format_param)
+        return params_list
 
     def ignore_filter(self, request, field, view):
         if hasattr(view, 'drf_ignore_filter'):
@@ -68,7 +78,7 @@ class QueryStringFilterBackend(BaseFilterBackend):
                 mapping = {}
             opts = queryset.model._meta
             for fieldname_arg in self.query_params:
-                if fieldname_arg in ['_distinct']:
+                if fieldname_arg in self.excluded_query_params:
                     continue
                 try:
                     value = self.query_params.getlist(fieldname_arg)

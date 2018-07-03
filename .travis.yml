@@ -31,7 +31,7 @@ env:
 
 
 before_install:
-  - pip install tox codecov
+  - pip install tox codecov pipenv
 
 before_script:
   - psql -c 'SHOW SERVER_VERSION' -U postgres
