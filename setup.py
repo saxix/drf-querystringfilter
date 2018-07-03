@@ -1,36 +1,61 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import ast
 import os
+import re
+import subprocess
 import sys
-import imp
 import codecs
+from distutils.errors import DistutilsError
+
 from setuptools import setup, find_packages
+from setuptools.command.sdist import sdist as BaseSDistCommand
 
-ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__)))
+ROOT = os.path.realpath(os.path.dirname(__file__))
 init = os.path.join(ROOT, 'src', 'drf_querystringfilter', '__init__.py')
+_version_re = re.compile(r'__version__\s+=\s+(.*)')
+_name_re = re.compile(r'NAME\s+=\s+(.*)')
 
-app = imp.load_source('drf_querystringfilter', init)
+sys.path.insert(0, os.path.join(ROOT, 'src'))
 
-reqs = 'install.py%d.pip' % sys.version_info[0]
+with open(init, 'rb') as f:
+    content = f.read().decode('utf-8')
+    VERSION = str(ast.literal_eval(_version_re.search(content).group(1)))
+    NAME = str(ast.literal_eval(_name_re.search(content).group(1)))
 
 
 def read(*files):
-    content = ''
+    content = []
     for f in files:
-        content += codecs.open(os.path.join(ROOT, 'src',
-                                            'requirements', f), 'r').read()
-    return content
+        content.extend(codecs.open(os.path.join(ROOT, 'src', 'requirements', f), 'r').readlines())
+    return "\n".join(filter(lambda l: not l.startswith('-'), content))
+
+
+class SDistCommand(BaseSDistCommand):
+
+    def run(self):
+        checks = {'install.pip': subprocess.run(['pipenv', 'lock', '--requirements'], stdout=subprocess.PIPE),
+                  'testing.pip': subprocess.run(['pipenv', 'lock', '-d', '--requirements'], stdout=subprocess.PIPE)}
+
+        for filename, out in checks.items():
+            f = os.path.join('src', 'requirements', filename)
+
+            reqs = codecs.open(os.path.join(ROOT, f), 'r').read()
+            if reqs != out.stdout.decode('utf8'):
+                msg = """Requirements file not updated.
+       Run 'pipenv lock --requirements' to update %s""" % f
+                raise DistutilsError(msg)
+        super().run()
 
 
 tests_requires = read('testing.pip')
-dev_requires = tests_requires + read('develop.pip')
-install_requires = read('install.any.pip', reqs)
+install_requires = read('install.pip')
 
 readme = codecs.open('README.rst').read()
 history = codecs.open('CHANGES.rst').read().replace('.. :changelog:', '')
 
-setup(name=app.NAME,
-      version=app.VERSION,
+setup(name=NAME,
+      version=VERSION,
       description="""Filter backend for DjangoRestFramework able to parse url parameters""",
       long_description=readme + '\n\n' + history,
       author='Stefano Apostolico',
@@ -40,9 +65,13 @@ setup(name=app.NAME,
       packages=find_packages('src'),
       include_package_data=True,
       install_requires=install_requires,
-      tests_require=dev_requires,
+      tests_require=tests_requires,
+      cmdclass={
+          'sdist': SDistCommand,
+
+      },
       extras_require={
-          'dev': dev_requires,
+          'dev': tests_requires,
           'test': tests_requires,
       },
       license="BSD",

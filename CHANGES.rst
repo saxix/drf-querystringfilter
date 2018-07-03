@@ -1,3 +1,8 @@
+0.6.0 (dev)
+================
+* Add handling of format query param
+
+
 0.5.0 18/06/2018
 ================
 * add support for django 2.0
