@@ -15,6 +15,18 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringFilterBackend(BaseFilterBackend):
+    def get_param_value(self, param_name):
+        """
+        Return the value from the query param dict
+        :param param_name: the name of the param to return
+        :return: the value of the query_param.getlist(param_name)
+        """
+        original_value = self.query_params.get(param_name)
+        if param_name.endswith('__in'):
+            return [original_value[0].split(',')]
+        else:
+            return [original_value]
+
     @property
     def query_params(self):
         """
@@ -45,7 +57,7 @@ class QueryStringFilterBackend(BaseFilterBackend):
 {}
 {}""".format(f, e))
             if '_distinct' in self.query_params:
-                f = self.query_params.getlist('_distinct')
+                f = self.get_param_value('_distinct')
                 qs = qs.order_by(*f).distinct(*f)
             return qs
         except (InvalidFilterError, InvalidQueryArgumentError) as e:
@@ -81,7 +93,7 @@ class QueryStringFilterBackend(BaseFilterBackend):
                 if fieldname_arg in self.excluded_query_params:
                     continue
                 try:
-                    value = self.query_params.getlist(fieldname_arg)
+                    value = self.get_param_value(fieldname_arg)
                     value = list(filter(lambda x: x, value))
                     if not value:
                         continue
@@ -142,7 +154,6 @@ class QueryStringFilterBackend(BaseFilterBackend):
                                 f = "{}".format(origin)
                                 filters[f] = value
                             elif op == 'in':
-                                value = value.split(',')
                                 f = "__".join([origin] + parts[1:])
                                 filters[f] = value
                             elif op == 'isnull':
@@ -150,7 +161,6 @@ class QueryStringFilterBackend(BaseFilterBackend):
                                 f = "__".join([origin] + parts[1:])
                                 filters[f] = value
                             elif op == 'not_in':
-                                value = value.split(',')
                                 exclude["{}__in".format(origin)] = value
                             elif op == 'not':
                                 f = "__".join([origin] + parts[1:-1])
