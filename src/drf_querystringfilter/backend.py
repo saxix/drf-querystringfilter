@@ -21,11 +21,11 @@ class QueryStringFilterBackend(BaseFilterBackend):
         :param param_name: the name of the param to return
         :return: the value of the query_param.getlist(param_name)
         """
-        original_value = self.query_params.get(param_name)
-        if param_name.endswith('__in'):
+        original_value = self.query_params.getlist(param_name)
+        if param_name.endswith('__in') or param_name.endswith('__not_in'):
             return [original_value[0].split(',')]
         else:
-            return [original_value]
+            return [original_value[0]]
 
     @property
     def query_params(self):
