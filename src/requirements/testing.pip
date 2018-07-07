@@ -13,7 +13,7 @@ pytest-coverage==0.0
 pytest-django==3.3.2
 pytest-echo==1.6.0
 pytest-pythonpath==0.7.2
-pytest==3.6.2
+pytest==3.6.3
 six==1.11.0
 tox==3.0.0
 virtualenv==16.0.0

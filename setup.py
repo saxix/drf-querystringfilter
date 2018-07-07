@@ -34,16 +34,17 @@ def read(*files):
 class SDistCommand(BaseSDistCommand):
 
     def run(self):
-        checks = {'install.pip': subprocess.run(['pipenv', 'lock', '--requirements'], stdout=subprocess.PIPE),
-                  'testing.pip': subprocess.run(['pipenv', 'lock', '-d', '--requirements'], stdout=subprocess.PIPE)}
+        checks = {'install.pip': ['pipenv', 'lock', '--requirements'],
+                  'testing.pip': ['pipenv', 'lock', '-d', '--requirements']}
 
-        for filename, out in checks.items():
+        for filename, cmd in checks.items():
+            out = subprocess.run(cmd, stdout=subprocess.PIPE)
             f = os.path.join('src', 'requirements', filename)
 
             reqs = codecs.open(os.path.join(ROOT, f), 'r').read()
             if reqs != out.stdout.decode('utf8'):
-                msg = """Requirements file not updated.
-       Run 'pipenv lock --requirements' to update %s""" % f
+                msg = f"""Requirements file not updated.
+       Run '{' '.join(cmd)} > {f}' to update {f}"""
                 raise DistutilsError(msg)
         super().run()
 

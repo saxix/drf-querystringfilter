@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+"psycopg2" = "*"
 
 [dev-packages]
 tox = "*"
@@ -13,9 +14,6 @@ pytest-coverage = "*"
 pytest-pythonpath = "*"
 pytest-echo = "*"
 django-webtest = "*"
-"psycopg2" = "*"
-django = "*"
-djangorestframework = "*"
 
 [requires]
 python_version = "3.6"

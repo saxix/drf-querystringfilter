@@ -1,2 +1,2 @@
 -i https://pypi.org/simple
-
+psycopg2==2.7.5
