@@ -43,8 +43,8 @@ class SDistCommand(BaseSDistCommand):
 
             reqs = codecs.open(os.path.join(ROOT, f), 'r').read()
             if reqs != out.stdout.decode('utf8'):
-                msg = f"""Requirements file not updated.
-       Run '{' '.join(cmd)} > {f}' to update {f}"""
+                msg = """Requirements file not updated.
+       Run '{%s} > %s'""".format(' '.join(cmd), f)
                 raise DistutilsError(msg)
         super().run()
 
