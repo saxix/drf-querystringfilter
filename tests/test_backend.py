@@ -151,6 +151,34 @@ def test_is(backend, view, rf, monkeypatch):
 
 
 @pytest.mark.django_db
+def test_inlist(backend, view, rf, monkeypatch):
+    monkeypatch.setattr(view, 'filter_fields', ['id'])
+    record(id=1)
+    record(id=2)
+    record(id=3)
+    record(id=4)
+
+    request = Request(rf.get('/aaa/?id__inlist=1,2,3'))
+
+    qs = backend.filter_queryset(request, view.queryset, view)
+    assert list(qs.values_list('id', flat=True)) == [1, 2, 3]
+
+
+@pytest.mark.django_db
+def test_not_inlist(backend, view, rf, monkeypatch):
+    monkeypatch.setattr(view, 'filter_fields', ['id'])
+    record(id=1)
+    record(id=2)
+    record(id=3)
+    record(id=4)
+
+    request = Request(rf.get('/aaa/?id__not_inlist=1,2,3'))
+
+    qs = backend.filter_queryset(request, view.queryset, view)
+    assert not qs.filter(id__in=[1, 2, 3])
+
+
+@pytest.mark.django_db
 def test_in(backend, view, rf, monkeypatch):
     monkeypatch.setattr(view, 'filter_fields', ['id'])
     record(id=1)
@@ -158,7 +186,7 @@ def test_in(backend, view, rf, monkeypatch):
     record(id=3)
     record(id=4)
 
-    request = Request(rf.get('/aaa/?id__in=1,2,3'))
+    request = Request(rf.get('/aaa/?id__in=1&id__in=2&id__in=3'))
 
     qs = backend.filter_queryset(request, view.queryset, view)
     assert list(qs.values_list('id', flat=True)) == [1, 2, 3]
@@ -167,11 +195,16 @@ def test_in(backend, view, rf, monkeypatch):
 @pytest.mark.django_db
 def test_not_in(backend, view, rf, monkeypatch):
     monkeypatch.setattr(view, 'filter_fields', ['id'])
+    record(id=1)
+    record(id=2)
+    record(id=3)
+    record(id=4)
 
-    request = Request(rf.get('/aaa/?id__not_in=1,2,3'))
+    request = Request(rf.get('/aaa/?id__not_in=1&id__not_in=2'))
 
     qs = backend.filter_queryset(request, view.queryset, view)
-    assert not qs.filter(id__in=[1, 2, 3])
+    assert not qs.filter(id__in=[1, 2])
+
 
 
 @pytest.mark.django_db

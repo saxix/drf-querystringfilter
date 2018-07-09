@@ -15,6 +15,23 @@ logger = logging.getLogger(__name__)
 
 
 class QueryStringFilterBackend(BaseFilterBackend):
+    def get_param_value(self, param_name):
+        """
+        Return the value from the query param dict
+        :param param_name: the name of the param to return
+        :return: the value of the query_param.getlist(param_name)
+        """
+        original_value = self.query_params.getlist(param_name)
+        if param_name.endswith('__inlist') or param_name.endswith('__not_inlist'):
+            value = original_value[0].split(',')
+        else:
+            value = original_value
+        if isinstance(value, list) and len(value) == 1:
+            return value[0]
+        else:
+            return list(filter(lambda x: x, value))
+
+
     @property
     def query_params(self):
         """
@@ -45,7 +62,7 @@ class QueryStringFilterBackend(BaseFilterBackend):
 {}
 {}""".format(f, e))
             if '_distinct' in self.query_params:
-                f = self.query_params.getlist('_distinct')
+                f = self.get_param_value('_distinct')
                 qs = qs.order_by(*f).distinct(*f)
             return qs
         except (InvalidFilterError, InvalidQueryArgumentError) as e:
@@ -81,8 +98,7 @@ class QueryStringFilterBackend(BaseFilterBackend):
                 if fieldname_arg in self.excluded_query_params:
                     continue
                 try:
-                    value = self.query_params.getlist(fieldname_arg)
-                    value = list(filter(lambda x: x, value))
+                    value = self.get_param_value(fieldname_arg)
                     if not value:
                         continue
 
@@ -136,13 +152,15 @@ class QueryStringFilterBackend(BaseFilterBackend):
                             filters, exclude = processor(filters, exclude, **payload)
 
                         else:
-                            value = value[0]
+                            # value = value[0]
                             if op == 'is':
                                 value = parse_bool(value)
                                 f = "{}".format(origin)
                                 filters[f] = value
+                            elif op == 'inlist':
+                                f = "__".join([origin] + parts[1:-1]) + '__in'
+                                filters[f] = value
                             elif op == 'in':
-                                value = value.split(',')
                                 f = "__".join([origin] + parts[1:])
                                 filters[f] = value
                             elif op == 'isnull':
@@ -150,7 +168,8 @@ class QueryStringFilterBackend(BaseFilterBackend):
                                 f = "__".join([origin] + parts[1:])
                                 filters[f] = value
                             elif op == 'not_in':
-                                value = value.split(',')
+                                exclude["{}__in".format(origin)] = value
+                            elif op == 'not_inlist':
                                 exclude["{}__in".format(origin)] = value
                             elif op == 'not':
                                 f = "__".join([origin] + parts[1:-1])
@@ -176,11 +195,11 @@ class QueryStringFilterBackend(BaseFilterBackend):
                         field_object = opts.get_field(origin)
                         if isinstance(field_object, CharField):
                             field_name = "{}__iexact".format(origin)
-                            filters[field_name] = value[0]
+                            filters[field_name] = value
                         elif isinstance(field_object, BooleanField):
                             filters[field_name] = parse_bool(value)
                         else:
-                            filters[field_name] = value[0]
+                            filters[field_name] = value
 
                         # except FieldDoesNotExist:
                         #     filters[origin] = value

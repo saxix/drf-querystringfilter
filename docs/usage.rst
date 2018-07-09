@@ -97,11 +97,30 @@ not
 
     objects.exclude(name="abc")
 
+inlist
+------
+::
+
+    ?id__in=1,2,4
+
+    objects.filter(id__in=[1,2,3])
+
+
+not_inlist
+----------
+::
+
+    ?id__not_in=1,2,4
+
+    objects.exclude(id__in=[1,2,3])
+
+
+
 in
 --
 ::
 
-    ?id__in=1,2,4
+    ?id__in=1&in__in=2&id__in=3
 
     objects.filter(id__in=[1,2,3])
 
@@ -110,9 +129,10 @@ not_in
 ------
 ::
 
-    ?id__not_in=1,2,4
+    ?id__not_in=1&in__not_in=2&id__not_in=3
 
     objects.exclude(id__in=[1,2,3])
+
 
 inarray
 -------

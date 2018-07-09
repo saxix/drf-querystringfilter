@@ -84,10 +84,16 @@ class TestOperator(object):
         assert assert_result(response, 'logic', False)
 
     @pytest.mark.django_db
-    def test_in(self):
-        request = factory.get(self.uri, {'integer__in': '1,2,3'})
+    def test_inlist(self):
+        request = factory.get(self.uri, {'integer__inlist': '1,2,3'})
         response = self.view(request).render()
         assert assert_result(response, 'fk', lambda i: i in [1, 2, 3])
+
+    @pytest.mark.django_db
+    def test_in(self):
+        request = factory.get(self.uri, {'integer__in': [1,3]})
+        response = self.view(request).render()
+        assert assert_result(response, 'fk', lambda i: i in [1, 3])
 
     @pytest.mark.django_db
     def test_isnull(self):
@@ -99,10 +105,16 @@ class TestOperator(object):
         # assert all(i is None for i in values)
 
     @pytest.mark.django_db
-    def test_not_in(self):
-        request = factory.get(self.uri, {'integer__not_in': '1,2,3'})
+    def test_not_inlist(self):
+        request = factory.get(self.uri, {'integer__not_inlist': '1,2,3'})
         response = self.view(request).render()
         assert assert_result(response, 'integer', lambda i: i not in [1, 2, 3])
+
+    @pytest.mark.django_db
+    def test_not_in(self):
+        request = factory.get(self.uri, {'integer__not_in': [1,3]})
+        response = self.view(request).render()
+        assert assert_result(response, 'integer', lambda i: i not in [1, 3])
 
         # j = json.loads(response.content)
         # values = map(operator.itemgetter('fk'), j)

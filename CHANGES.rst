@@ -1,5 +1,17 @@
-0.6.0 (dev)
-================
+1.0
+===
+* First stable release
+
+0.7.0
+=====
+* abstract query_params habdling
+* handle multple values in query string
+* BACKWARD INCOMPATIBLE: `__in` now accept raw values and can appear multiple times
+* new operators `__inlist` and `__not_inlist` to be used for backward compatibility with `__in` and `__not_in`
+
+
+0.6.0
+=====
 * Add handling of format query param
 
 
