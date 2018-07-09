@@ -31,6 +31,19 @@ def read(*files):
     return "\n".join(filter(lambda l: not l.startswith('-'), content))
 
 
+def check(cmd, filename):
+    out = subprocess.run(cmd, stdout=subprocess.PIPE)
+    f = os.path.join('src', 'requirements', filename)
+    reqs = codecs.open(os.path.join(ROOT, f), 'r').readlines()
+    existing = {re.split("(==|>=|<=>|<|)", name[:-1])[0] for name in reqs}
+    declared = {re.split("(==|>=|<=>|<|)", name)[0] for name in out.stdout.decode('utf8').split("\n") if name and not name.startswith('-')}
+
+    if existing != declared:
+        msg = """Requirements file not updated.
+Run 'make requiremets'
+""".format(' '.join(cmd), f)
+        raise DistutilsError(msg)
+
 class SDistCommand(BaseSDistCommand):
 
     def run(self):
@@ -38,14 +51,7 @@ class SDistCommand(BaseSDistCommand):
                   'testing.pip': ['pipenv', 'lock', '-d', '--requirements']}
 
         for filename, cmd in checks.items():
-            out = subprocess.run(cmd, stdout=subprocess.PIPE)
-            f = os.path.join('src', 'requirements', filename)
-
-            reqs = codecs.open(os.path.join(ROOT, f), 'r').read()
-            if reqs != out.stdout.decode('utf8'):
-                msg = """Requirements file not updated.
-       Run '{%s} > %s'""".format(' '.join(cmd), f)
-                raise DistutilsError(msg)
+            check (cmd, filename)
         super().run()
 
 
