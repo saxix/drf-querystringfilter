@@ -4,8 +4,11 @@ beautifulsoup4
 coverage
 django-webtest
 more-itertools
+packaging
 pluggy
+psycopg2
 py
+pyparsing
 pytest-cov
 pytest-cover
 pytest-coverage

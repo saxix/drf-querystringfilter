@@ -12,22 +12,13 @@ addons:
 services:
   - postgresql
 
+
 env:
-  - TOXENV=py27-d110-f35
-  - TOXENV=py27-d110-f36
-  - TOXENV=py27-d110-f37
-  - TOXENV=py27-d111-f35
-  - TOXENV=py27-d111-f36
-  - TOXENV=py27-d111-f37
+  - DJANGO=2.0 DRF=3.7
+  - DJANGO=2.0 DRF=3.8
 
-  - TOXENV=py36-d110-f35
-  - TOXENV=py36-d110-f36
-  - TOXENV=py36-d110-f37
-  - TOXENV=py36-d111-f35
-  - TOXENV=py36-d111-f36
-  - TOXENV=py36-d111-f37
-
-  - TOXENV=py36-d20-f37
+  - DJANGO=2.1 DRF=3.7
+  - DJANGO=2.1 DRF=3.8
 
 
 before_install:
@@ -37,7 +28,7 @@ before_script:
   - psql -c 'SHOW SERVER_VERSION' -U postgres
 
 script:
-  - tox -e $TOXENV
+  - tox -e "py${TRAVIS_PYTHON_VERSION//.}-d${DJANGO//.}-drf${DRF//.}"
 
 before_success:
   - coverage erase

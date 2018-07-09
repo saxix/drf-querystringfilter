@@ -34,7 +34,7 @@ def read(*files):
 def check(cmd, filename):
     out = subprocess.run(cmd, stdout=subprocess.PIPE)
     f = os.path.join('src', 'requirements', filename)
-    reqs = codecs.open(os.path.join(ROOT, f), 'r').readlines()
+    reqs = codecs.open(os.path.join(ROOT, f), 'r').readlines() or []
     existing = {re.split("(==|>=|<=>|<|)", name[:-1])[0] for name in reqs}
     declared = {re.split("(==|>=|<=>|<|)", name)[0] for name in out.stdout.decode('utf8').split("\n") if name and not name.startswith('-')}
 
