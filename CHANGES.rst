@@ -1,3 +1,7 @@
+1.0
+===
+* First stable release
+
 0.7.0
 =====
 * abstract query_params habdling
