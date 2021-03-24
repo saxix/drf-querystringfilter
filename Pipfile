@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-factory-boy = "*"
 
 [dev-packages]
 django = "*"
 tox = "*"
+factory-boy = "*"
 "psycopg2" = "*"
 pytest = "*"
 pytest-django = "*"
