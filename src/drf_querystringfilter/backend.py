@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 import logging
 from collections import OrderedDict
-from functools import lru_cache
 
 from django import forms
-from django.conf import settings
-from django.db.models import BooleanField, CharField, FieldDoesNotExist
+from django.db.models import BooleanField
 from django.template import loader
+
 from rest_framework.filters import BaseFilterBackend
 from rest_framework.settings import api_settings
 
-from .exceptions import FilteringError, InvalidFilterError, InvalidQueryArgumentError, QueryFilterException, \
-    InvalidQueryValueError
+from .compat import FieldDoesNotExist
+from .exceptions import (
+    InvalidFilterError, InvalidQueryArgumentError, InvalidQueryValueError,
+    QueryFilterException
+)
 from .filters import RexList, parse_bool
 
 logger = logging.getLogger(__name__)

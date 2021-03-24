@@ -2,7 +2,6 @@
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-# from factory import DjangoModelFactory, SubFactory, Sequence
 from factory import Sequence, SubFactory
 from factory.django import DjangoModelFactory
 

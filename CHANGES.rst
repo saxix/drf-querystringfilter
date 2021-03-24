@@ -5,7 +5,6 @@
 * add coreapi/coreschema support
 * add form for BrowseableApi
 
-
 1.0
 ===
 * First stable release
