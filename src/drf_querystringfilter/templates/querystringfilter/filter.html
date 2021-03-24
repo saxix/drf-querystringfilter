@@ -1,0 +1,8 @@
+{% load rest_framework i18n %}
+<form method="get" action="">
+    <table>
+    {{ form.as_table }}
+
+    </table>
+    <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+</form>

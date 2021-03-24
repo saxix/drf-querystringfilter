@@ -1,3 +1,11 @@
+2.0
+===
+* BACKWARD INCOMPATIBLE: Full rewriting and synthax changes
+* new `InvalidQueryValueError`
+* add coreapi/coreschema support
+* add form for BrowseableApi
+
+
 1.0
 ===
 * First stable release

@@ -7,12 +7,12 @@ from .exceptions import InvalidPattern
 
 
 def parse_bool(value):
-    if str(value).lower() in ['true', '1']:
+    if str(value).lower() in ['true', '1', 'yes', 't', 'y']:
         return True
-    elif str(value).lower() in ['false', '0']:
+    elif str(value).lower() in ['false', '0', 'no', 'f', 'n']:
         return False
     else:
-        return bool(value)
+        raise ValueError(value)
 
 
 class RexList(list):

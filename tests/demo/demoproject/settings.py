@@ -11,12 +11,15 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'drf-qs',
-        'HOST': '127.0.0.1',
-        'PORT': '',
-        'USER': 'postgres',
-        'PASSWORD': ''}}
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'drf_qs.sqlite',
+        # 'HOST': '127.0.0.1',
+        # 'PORT': '',
+        # 'USER': 'postgres',
+        # 'PASSWORD': ''
+    }
+}
 
 TIME_ZONE = 'Europe/Rome'
 LANGUAGE_CODE = 'en-us'
@@ -45,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'rest_framework',
+    'drf_querystringfilter',
     'demoproject']
 
 

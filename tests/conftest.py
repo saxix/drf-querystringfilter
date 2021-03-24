@@ -2,6 +2,18 @@ import logging
 
 import pytest
 
+from demoproject.models import UserFactory, DemoModelFactory
+
+
+@pytest.fixture()
+def user(db):
+    return UserFactory()
+
+
+@pytest.fixture()
+def demomodel(user):
+    return DemoModelFactory(fk=user)
+
 
 @pytest.fixture(scope='session')
 def client(request):

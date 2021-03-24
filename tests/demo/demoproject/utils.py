@@ -29,7 +29,7 @@ class record(object):
                         char=str(_id),
                         date=datetime.today(),
                         choices=1,
-                        json={},
+                        # json={},
                         integer=_id)
         defaults.update(self.kwargs)
         self.obj = DemoModel.objects.create(**defaults)

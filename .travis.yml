@@ -16,9 +16,11 @@ services:
 env:
   - DJANGO=2.0 DRF=3.7
   - DJANGO=2.0 DRF=3.8
+  - DJANGO=2.0 DRF=3.9
 
   - DJANGO=2.1 DRF=3.7
   - DJANGO=2.1 DRF=3.8
+  - DJANGO=2.1 DRF=3.9
 
 
 before_install:

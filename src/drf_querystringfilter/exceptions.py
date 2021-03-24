@@ -3,7 +3,9 @@ from __future__ import absolute_import, unicode_literals
 
 from rest_framework.exceptions import ParseError
 
-QueryFilterException = Exception
+
+class QueryFilterException(Exception):
+    pass
 
 
 class InvalidPattern(TypeError):
@@ -18,15 +20,15 @@ class InvalidQueryArgumentError(QueryFilterException):
         super(InvalidQueryArgumentError, self).__init__(msg)
 
 
-# class InvalidQueryValueError(QueryFilterException):
-#     argument = ''
-#
-#     def __init__(self, field, *args, **kwargs):
-#         msg = "Invalid value '{}' for parameter {}".format(field, self.argument)
-#         super(InvalidQueryValueError, self).__init__(msg)
-#
+class InvalidQueryValueError(QueryFilterException):
+    argument = ''
 
-class InvalidFilterError(ParseError):
+    def __init__(self, field, *args, **kwargs):
+        msg = "Invalid value '{}' for parameter {}".format(field, self.argument)
+        super(InvalidQueryValueError, self).__init__(msg)
+
+
+class InvalidFilterError(QueryFilterException):
     def __init__(self, field, *args, **kwargs):
         super(InvalidFilterError, self).__init__("Invalid filter '{}'".format(field))
 
