@@ -1,7 +1,8 @@
 language: python
 
 python:
-  - "3.6"
+  - "3.8"
+  - "3.9"
 
 addons:
   postgresql: "9.4"
@@ -14,13 +15,13 @@ services:
 
 
 env:
-  - DJANGO=2.0 DRF=3.7
-  - DJANGO=2.0 DRF=3.8
-  - DJANGO=2.0 DRF=3.9
+  - DJANGO=3.0 DRF=3.10
+  - DJANGO=3.0 DRF=3.11
+  - DJANGO=3.0 DRF=3.12
 
-  - DJANGO=2.1 DRF=3.7
-  - DJANGO=2.1 DRF=3.8
-  - DJANGO=2.1 DRF=3.9
+  - DJANGO=3.1 DRF=3.10
+  - DJANGO=3.1 DRF=3.11
+  - DJANGO=3.1 DRF=3.12
 
 
 before_install:
