@@ -31,30 +31,6 @@ def read(*files):
     return "\n".join(filter(lambda l: not l.startswith('-'), content))
 
 
-def check(cmd, filename):
-    out = subprocess.run(cmd, stdout=subprocess.PIPE)
-    f = os.path.join('src', 'requirements', filename)
-    reqs = codecs.open(os.path.join(ROOT, f), 'r').readlines() or []
-    existing = {re.split("(==|>=|<=>|<|)", name[:-1])[0] for name in reqs}
-    declared = {re.split("(==|>=|<=>|<|)", name)[0] for name in out.stdout.decode('utf8').split("\n") if name and not name.startswith('-')}
-
-    if existing != declared:
-        msg = """Requirements file not updated.
-Run 'make requiremets'
-""".format(' '.join(cmd), f)
-        raise DistutilsError(msg)
-
-class SDistCommand(BaseSDistCommand):
-
-    def run(self):
-        checks = {'install.pip': ['pipenv', 'lock', '--requirements'],
-                  'testing.pip': ['pipenv', 'lock', '-d', '--requirements']}
-
-        for filename, cmd in checks.items():
-            check (cmd, filename)
-        super().run()
-
-
 tests_requires = read('testing.pip')
 install_requires = read('install.pip')
 
@@ -73,10 +49,6 @@ setup(name=NAME,
       include_package_data=True,
       install_requires=install_requires,
       tests_require=tests_requires,
-      cmdclass={
-          'sdist': SDistCommand,
-
-      },
       extras_require={
           'dev': tests_requires,
           'test': tests_requires,
