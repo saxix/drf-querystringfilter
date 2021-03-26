@@ -1,6 +1,8 @@
 2.0
 ===
 * BACKWARD INCOMPATIBLE: Full rewriting and synthax changes
+* add support Django 3.x
+* drop support python 2.x
 * new `InvalidQueryValueError`
 * add coreapi/coreschema support
 * add form for BrowseableApi
