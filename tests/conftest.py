@@ -1,8 +1,7 @@
 import logging
 
 import pytest
-
-from demoproject.models import UserFactory, DemoModelFactory
+from demoproject.models import DemoModelFactory, UserFactory
 
 
 @pytest.fixture()

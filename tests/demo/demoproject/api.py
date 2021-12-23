@@ -1,9 +1,8 @@
 from django.contrib.auth.models import User
-from rest_framework.generics import ListAPIView
-from rest_framework import serializers
-from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from demoproject.models import DemoModel
+from rest_framework import serializers
+from rest_framework.viewsets import ModelViewSet
 
 from drf_querystringfilter.backend import QueryStringFilterBackend
 
@@ -45,7 +44,7 @@ class DemoModelViewSet(ModelViewSet):
     serializer_class = DemoModelSerializer
     filter_fields = ['fk', 'char', 'integer', 'logic', 'date', 'json', 'processor']
     filter_backends = (CustomQueryStringFilterBackend,)
-    filter_blacklist = ['forbidden[0-9]',]
+    filter_blacklist = ['forbidden[0-9]', ]
     queryset = DemoModel.objects.all()
 
     def drf_ignore_filter(self, request, field):

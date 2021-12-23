@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+
 from factory import Sequence, SubFactory
 from factory.django import DjangoModelFactory
 
@@ -32,7 +32,7 @@ class DemoModel(models.Model):
 
 
 class UserFactory(DjangoModelFactory):
-    id = Sequence(lambda x: 10+x)
+    id = Sequence(lambda x: 10 + x)
     username = Sequence(lambda x: "User%s" % x)
 
     class Meta:
