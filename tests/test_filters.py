@@ -1,25 +1,15 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from inspect import isclass
 
 import pytest
-from rest_framework.test import APIClient
-
 from demoproject.api import DemoModelViewSet
-from demoproject.models import UserFactory, DemoModel
+from demoproject.models import UserFactory
 from demoproject.utils import record
+from rest_framework.test import APIClient
 
 from drf_querystringfilter.backend import QueryStringFilterBackend
 from drf_querystringfilter.exceptions import InvalidQueryArgumentError
 
-
-# def assert_queryset_values(qs, field, value):
-#     return all(getattr(rec, field) == value for rec in qs.all())
-#
-# def pytest_assertrepr_compare(op, left, right):
-#     if isinstance(left, list) and isinstance(right, Foo) and op == "==":
-#         return ['Comparing Foo instances:',
-#                '   vals: %s != %s' % (left.val, right.val)]
 
 @pytest.fixture
 def data():
@@ -124,7 +114,6 @@ def test_bool(db, flt, expected, api_client, data):
         assert len(res.json()) == expected, res.json()
 
 
-
 @pytest.mark.parametrize('flt,expected', DATES, ids=[i[0] for i in DATES])
 def test_dates(db, flt, expected, api_client, view, data):
     res = api_client.get('/demos/?%s' % flt)
@@ -166,4 +155,4 @@ def test_ignored(db, api_client, data):
 @pytest.mark.parametrize('flt', ['forbidden1=1', 'forbidden3=1'])
 def test_filter_blacklist(db, api_client, flt, data):
     with pytest.raises(InvalidQueryArgumentError):
-        res = api_client.get('/demos/?%s' % flt)
+        api_client.get('/demos/?%s' % flt)

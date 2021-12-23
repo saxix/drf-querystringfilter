@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import sys
 from datetime import datetime
 
@@ -13,11 +12,12 @@ skipIfDjangoVersion = lambda v: pytest.mark.skipif('django.VERSION[:2]>={}'.form
                                                    reason='Skip if django>={}'.format(v))
 
 
-class record(object):
+class record:
     def __init__(self, **kwargs):
         self.kwargs = kwargs
-        from demoproject.models import DemoModel
         from django.contrib.auth.models import User
+
+        from demoproject.models import DemoModel
         _id = self.kwargs.get('id', 1)
         self.u, __ = User.objects.get_or_create(username=str(_id), pk=_id)
 
