@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
 import logging
 from collections import OrderedDict
 
 from django import forms
+from django.core.exceptions import FieldDoesNotExist
 from django.db.models import BooleanField
 from django.template import loader
 
 from rest_framework.filters import BaseFilterBackend
 from rest_framework.settings import api_settings
 
-from .compat import FieldDoesNotExist
 from .exceptions import (
     InvalidFilterError, InvalidQueryArgumentError, InvalidQueryValueError,
     QueryFilterException
@@ -169,9 +168,9 @@ class QueryStringFilterBackend(BaseFilterBackend):
 
                 except ValueError as e:
                     raise InvalidQueryValueError(e)
-                except QueryFilterException as e:
+                except QueryFilterException:
                     raise
-                except Exception as e:
+                except Exception:
                     raise InvalidFilterError(fieldname_arg)
         return filters, exclude
 

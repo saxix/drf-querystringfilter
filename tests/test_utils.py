@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 import pytest
 
 from drf_querystringfilter.exceptions import InvalidPattern
@@ -8,30 +5,30 @@ from drf_querystringfilter.filters import RexList
 
 
 def test_rexlist():
-    l = RexList()
-    l.append('.*')
-    assert 1 in l
-    assert '1' in l
+    ll = RexList()
+    ll.append('.*')
+    assert 1 in ll
+    assert '1' in ll
 
-    l = RexList()
-    l.append(r'a?')
-    l.append(r'b*')
-    assert 'c' not in l
-    assert 'b' in l
-    assert 'aa' in l
-    assert '^baa' not in l
+    ll = RexList()
+    ll.append(r'a?')
+    ll.append(r'b*')
+    assert 'c' not in ll
+    assert 'b' in ll
+    assert 'aa' in ll
+    assert '^baa' not in ll
 
-    l = RexList()
-    l.append(r'.*__')
-    assert 'join__field' in l
+    ll = RexList()
+    ll.append(r'.*__')
+    assert 'join__field' in ll
 
     with pytest.raises(InvalidPattern):
-        l.append('[*')
+        ll.append('[*')
 
-    l = RexList(['.*'])
-    l[0] = '.*'
+    ll = RexList(['.*'])
+    ll[0] = '.*'
     with pytest.raises(InvalidPattern):
-        l[0] = '[*'
+        ll[0] = '[*'
 
     with pytest.raises(InvalidPattern):
         RexList(['.*', []])

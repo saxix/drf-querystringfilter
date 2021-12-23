@@ -1,3 +1,8 @@
+2.1 (in development)
+===
+* add support Django 4.x
+* drop support Django 2.x
+
 2.0
 ===
 * BACKWARD INCOMPATIBLE: Full rewriting and synthax changes
